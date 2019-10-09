@@ -1,21 +1,29 @@
 {
   "compilerOptions": {
+    "module": "commonjs",
     "allowJs": true,
     "baseUrl": ".",
     "experimentalDecorators": true,
     "jsx": "react",
     "noEmitOnError": true,
-    "outDir": "lib",
+    "rootDir": "src",
+    "outDir": "dist",
     "sourceMap": true,
     "target": "es5",
     "lib": [
       "es2015",
       "dom"
-    ]
+    ],
+        "typeRoots": [
+          "node_modules/@types"
+        ]
   },
   "exclude": [
+    "convertToSingleHost.js",
+    "server.js",
     "node_modules",
     "dist",
+    "test",   
     "lib",
     "lib-amd"
   ]
