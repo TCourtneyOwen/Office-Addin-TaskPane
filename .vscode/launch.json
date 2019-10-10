@@ -70,6 +70,35 @@
       "url": "${input:officeOnlineDocumentUrl}",
       "webRoot": "${workspaceFolder}",
       "preLaunchTask": "Debug: Web"
+    },
+    {
+      "type": "edge",
+      "request": "attach",
+      "name": "Attach to Addin Debug Server",
+      "program": "${workspaceFolder}/src/taskpane/taskpane.ts",
+      "stopOnEntry": true,
+      "debugServer": 4712,
+      "webRoot": "${workspaceFolder}/src",
+      "sourceMaps": true,
+      "sourceMapPathOverrides": {
+        "/source/*" : "${workspaceFolder}/src/*",
+      },
+      "showAsyncStacks": true,
+      "skipFiles": ["${workspaceFolder}/node_modules/*", "polyfill.js", "excel-win32-16.01.js"]
+    },
+    {
+      "type": "edge",
+      "request": "attach",
+      "name": "Attach to Addin",
+      "port": 9222,
+      "url": "https://localhost:3000/taskpane.html?_host_Info=Excel$Win32$16.01$en-US$$$$0",
+      "webRoot": "${workspaceFolder}/src",
+      "sourceMaps": true,
+      "sourceMapPathOverrides": {
+        "/source/*" : "${workspaceFolder}/src/*",
+      },
+      "showAsyncStacks": true,
+      "skipFiles": ["${workspaceFolder}/node_modules/*", "polyfill.js", "excel-win32-16.01.js"]
     }
   ],
   "inputs": [
@@ -77,6 +106,11 @@
       "id": "officeOnlineDocumentUrl",
       "type": "promptString",
       "description": "Please enter the url for the Office Online document."
-    }
+    },
+    {
+      "id": "officeAddInUrl",
+      "type": "promptString",
+      "description": "https://localhost:3000/taskpane.html?_host_Info=Excel$Win32$16.01$en-US$$$$0"
+    },
   ]
 }
