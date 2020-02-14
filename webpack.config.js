@@ -60,6 +60,7 @@ module.exports = async (env, options) => {
       })
     ],
     devServer: {
+      inline: false,
       headers: {
         "Access-Control-Allow-Origin": "*"
       },      
