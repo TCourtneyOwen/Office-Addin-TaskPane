@@ -76,6 +76,7 @@
       "request": "attach",
       "name": "Attach to Addin",
       "port": 9222,
+      "trace":"verbose",
       "url": "https://localhost:3000/taskpane.html?_host_Info=Excel$Win32$16.01$en-US$$$$0",
       "webRoot": "${workspaceFolder}/src",
       "sourceMaps": true,
@@ -88,7 +89,22 @@
         "polyfill.js",
         "excel-win32-16.01.js"
       ]
-    }
+    },
+    {
+      "type": "edge",
+      "request": "launch",
+      "name": "Attach to server",
+      "webRoot": "${workspaceFolder}\\src",
+      "url": "https://localhost:3000/taskpane.html?_host_Info=Excel$Win32$16.01$en-US$$$$0",
+      "debugServer": 4712,
+      "sourceMaps": true,
+      "sourceMapPathOverrides": {
+        "webpack:///./src/*": "${workspaceFolder}/src/*",
+        "webpack:///./node_modules/*": "${workspaceFolder}/node_modules/*",
+        "webpack:///(webpack)-dev-server/*": "${workspaceFolder}/node_modules/webpack-dev-server/*",
+        "webpack:///(webpack)/*": "${workspaceFolder}/webpack/*",
+      }
+    },
   ],
   "inputs": [
     {
