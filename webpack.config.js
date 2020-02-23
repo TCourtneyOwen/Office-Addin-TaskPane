@@ -60,6 +60,7 @@ module.exports = async (env, options) => {
       })
     ],
     devServer: {
+      writeToDisk: true,
       inline: false,
       headers: {
         "Access-Control-Allow-Origin": "*"
