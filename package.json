@@ -27,7 +27,9 @@
     "test": "mocha -r ts-node/register test/*.ts",
     "validate": "office-addin-manifest validate manifest.xml"
   },
-  "dependencies": {},
+  "dependencies": {
+    "source-map": "^0.7.3"
+  },
   "devDependencies": {
     "@types/cors": "2.8.4",
     "@babel/core": "^7.6.0",
