@@ -13,4 +13,10 @@ function getLineEndings() {
             }
             console.log(total);
 
+            var charCount = 0;
+            for (var i = 0; i < 275; i++) {
+                charCount += total[i];
+            }
+            console.log(charCount);           
+
 }
