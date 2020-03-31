@@ -4,6 +4,20 @@
   "version": "2.0.0",
   "tasks": [
     {
+      "label": "Sideload",
+      "type": "npm",
+      "script": "start:desktop -- --app excel", 
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "clear": true,
+        "panel": "shared",
+        "showReuseMessage": false
+      }
+    },
+    {
       "label": "Build (Development)",
       "type": "npm",
       "script": "build:dev",
