@@ -26,7 +26,7 @@
       ]
     },
     {
-      // "preLaunchTask": "Sideload",
+      "preLaunchTask": "Sideload",
       "type": "office-addin",
       "request": "attach",
       "name": "Attach to Addin With SourceMaps",

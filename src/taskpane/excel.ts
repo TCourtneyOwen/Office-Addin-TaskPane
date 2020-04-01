@@ -30,17 +30,19 @@ export async function run() {
 
       if (country !== "") {
         const dataByCountry = await getCovidDataByCountry(country);
-        await addTableForCountry(dataByCountry, context);
-        await addChart(context);
+        const countryData = Object.getOwnPropertyNames(dataByCountry);
+        if(countryData[0] !== "dt") {
+          await addTableForCountry(dataByCountry, context);
+          await addChart(context);
+        }else {
+          range.values = [[`${country} is not a valid country name`]];
+          await context.sync();
+        }
       }
     });
   } catch (error) {
     console.error(error);
   }
-}
-
-function logMessgae(message) {
-  console.log(message);
 }
 
 export async function getCovidData(): Promise<any> {
@@ -160,9 +162,8 @@ async function addChart(context): Promise<void> {
       const sheet = context.workbook.worksheets.getItem("Sheet1");
       sheet.charts.load("count");
       await context.sync();
-      
-      const chartCount = sheet.charts.count;
-      if (chartCount > 0) {
+
+      if (sheet.charts.count > 0) {
         return resolve();
       }
      
