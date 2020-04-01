@@ -33,8 +33,6 @@ export async function run() {
         await addTableForCountry(dataByCountry, context);
         await addChart(context);
       }
-
-      logMessgae(range.address);
     });
   } catch (error) {
     console.error(error);
@@ -120,13 +118,14 @@ async function addTable(data: any, context) {
   }
 }
 
-async function addTableForCountry(data: any, context): Promise<string> {
-  return new Promise<string>(async (resolve, reject) => {
+async function addTableForCountry(data: any, context): Promise<void | string> {
+  return new Promise<void>(async (resolve, reject) => {
     try {
-      // const currentTable = context.worksheets.worksheets.getItem("Sheet1").tables.getItem("CovidTable");
-      // if (currentTable !== undefined) {
-      //   currentTable.delete();
-      // }
+      const currentTable = context.workbook.worksheets.getItem("Sheet1").tables.getItemOrNullObject("CovidTable");
+      if (currentTable) {
+        currentTable.delete();
+        await context.sync();
+      }
       
       var sheet = context.workbook.worksheets.getItem("Sheet1");
       var covidTable = sheet.tables.add("A1:D1", true /*hasHeaders*/);
@@ -148,7 +147,7 @@ async function addTableForCountry(data: any, context): Promise<string> {
       tableRange.load('address');
       sheet.activate();
       await context.sync();
-      resolve(tableRange.address);
+      resolve();
     } catch (err) {
       reject(err);
     }
@@ -158,18 +157,25 @@ async function addTableForCountry(data: any, context): Promise<string> {
 async function addChart(context): Promise<void> {
   return new Promise<void>(async (resolve, reject) => {
     try {
-      // const currentChart = context.workbook.worksheets.getItem("Sheet1").charts.getItem("Covid19 Data");
-      // if (currentChart !== undefined) {
-      //   currentChart.delete();
-      //   context.sync();
-      // }
       const sheet = context.workbook.worksheets.getItem("Sheet1");
-      var dataRange = sheet.getRange("A1:D2");
-      var chart = sheet.charts.add("3DColumnStacked", dataRange, "auto");
-
+      sheet.charts.load("count");
+      await context.sync();
+      
+      const chartCount = sheet.charts.count;
+      if (chartCount > 0) {
+        return resolve();
+      }
+     
+      const dataRange = sheet.getRange("A1:D2");
+      let chart = sheet.charts.add("3DColumnClustered", dataRange, "auto");
+      chart.name = "Covid19Chart";
       chart.title.text = "Covid19 Data";
       chart.legend.position = "right"
       chart.legend.format.fill.setSolidColor("white");
+      chart.dataLabels.format.font.size = 10;
+      chart.dataLabels.format.font.color = "black";
+
+      await context.sync();
       resolve();
     } catch (err) {
       reject(err);
