@@ -48,7 +48,7 @@ export async function run() {
             ranegeData.push([countries[i].toString()]);
             countryData.push(dataByCountry);
           } else {
-            ranegeData.push([`${countries[i]} is not a valid country name`]);
+            ranegeData.push([`${countries[i]} is not a valid country name, silly!`]);
           }
         }
       }
