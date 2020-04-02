@@ -25,23 +25,42 @@ export async function run() {
       range.load("values");
       await context.sync();
       const countries = range.values;
+      let ranegeData = [];
+      let countryData = [];
 
       for (let i = 0; i < countries.length; i++) {
         if (countries[i].toString() === "") {
-          range.values[i] = [[`No country named entered`]];
+          ranegeData.push(["No country name entered"]);
         } else {
           const dataByCountry = await getCovidDataByCountry(countries[i]);
-          const country = countries[i].toString().toLowerCase();
-          const found = dataByCountry[Object.keys(dataByCountry).find(key => key.toLowerCase() === country.toLowerCase())];
+          
+          // Check to see if valid data was actually returned. If not, country specified was invalid
+          let found = false;
+          for (let [key] of Object.entries(dataByCountry[0])) {
+            if (key.toLowerCase() === countries[i][0].toLowerCase()) {
+              found = true;
+              break;
+            }
+          }
 
+          // If valid data was found add on to countryData for subsequent table and chart creation
           if (found) {
-            await addTableForCountry(dataByCountry, context);
-            await addChart(context);
+            ranegeData.push([countries[i].toString()]);
+            countryData.push(dataByCountry);
           } else {
-            range.values[i] = [[`${countries[i]} is not a valid country name`]];
+            ranegeData.push([`${countries[i]} is not a valid country name`]);
           }
         }
       }
+
+      // Create table and chart if valid country data was gathered
+      if (countryData.length > 0) {
+        await addTableForCountry(countryData, context);
+        await addChart(context);
+      }
+
+      // Update cells to inform user if empty cell or invalid country was entered
+      range.values = ranegeData;
       await context.sync();
     });
   } catch (error) {
@@ -49,53 +68,11 @@ export async function run() {
   }
 }
 
-export async function getCovidData(): Promise<any> {
+async function getCovidDataByCountry(country: any[]): Promise<any> {
   return new Promise<object>(async (resolve, reject) => {
     const serverResponse: any = {};
     try {
-
-      const apiUrl: string = `https://covid2019-api.herokuapp.com/v2/total`;
-      const response = await fetch(apiUrl);
-      serverResponse["status"] = response.status;
-      const text = await response.text();
-      resolve(JSON.parse(text));
-    } catch (err) {
-      serverResponse["status"] = err;
-      reject(serverResponse);
-    }
-  });
-}
-
-async function getCovidDataForAllCountries(): Promise<any> {
-  return new Promise<object>(async (resolve, reject) => {
-    const serverResponse: any = {};
-    try {
-      const countriesApiUrl: string = `https://covid2019-api.herokuapp.com/countries`;
-      const response = await fetch(countriesApiUrl);
-      serverResponse["status"] = response.status;
-      const text = await response.text();
-      const countries: any = JSON.parse(text);
-      let databyCountry: Object[] = []
-
-      for (let i = 0; i < 10; i++) {
-        // Get data for country and add to databyCountry
-        const countryData: any = await getCovidDataByCountry(countries.countries[i]);
-        databyCountry.push(countryData);
-      }
-
-      resolve(databyCountry);
-    } catch (err) {
-      serverResponse["status"] = err;
-      reject(serverResponse);
-    }
-  });
-}
-
-async function getCovidDataByCountry(country: any[][]): Promise<any> {
-  return new Promise<object>(async (resolve, reject) => {
-    const serverResponse: any = {};
-    try {
-      // Get data for country and add to databyCountry
+      // Get data for country[ies]
       let databyCountry: Object[] = []
       for (let i = 0; i < country.length; i++) {
         const dataByCountryApiUrl = `https://covid2019-api.herokuapp.com/country/${country[i]}`;
@@ -115,26 +92,33 @@ async function getCovidDataByCountry(country: any[][]): Promise<any> {
 async function addTableForCountry(data: any, context): Promise<void | string> {
   return new Promise<void>(async (resolve, reject) => {
     try {
-      const currentTable = context.workbook.worksheets.getItem("Sheet1").tables.getItemOrNullObject("CovidTable");
+      // Delete table if it currently exists
+      const currentTable = context.workbook.worksheets.getActiveWorksheet().tables.getItemOrNullObject("CovidTable");
       if (currentTable) {
         currentTable.delete();
         await context.sync();
       }
 
-      var sheet = context.workbook.worksheets.getItem("Sheet1");
+      // Add table to worksheet
+      var sheet = context.workbook.worksheets.getActiveWorksheet();
       var covidTable = sheet.tables.add("A1:D1", true /*hasHeaders*/);
       covidTable.name = "CovidTable";
       covidTable.getHeaderRowRange().values = [["Country", "ComfirmedCases", "Recovered", "Deaths"]];
 
-      const countries = Object.values(data);
-      for (var key in countries) {
-        const country = countries[key];
-        const countryData = Object.getOwnPropertyNames(country);
-
-        if (countryData[0] !== "dt") {
-          covidTable.rows.add(null /*add rows to the end of the table*/, [
-            [countryData[0], country[countryData[0]].confirmed, country[countryData[0]].recovered, country[countryData[0]].deaths],
-          ]);
+      // Add rows to table
+      for (let i = 0; i < data.length; i++) {
+        for (var key in data[i][0]) {
+          if (key === "dt" || key == "ts") {
+            continue;
+          }
+          const country = key;
+          const countryData = data[i][0][key];
+  
+          if (countryData[0] !== "dt") {
+            covidTable.rows.add(null /*add rows to the end of the table*/, [
+              [country, countryData.confirmed, countryData.recovered, countryData.deaths],
+            ]);
+          }
         }
       }
 
@@ -154,15 +138,15 @@ async function addTableForCountry(data: any, context): Promise<void | string> {
 async function addChart(context): Promise<void> {
   return new Promise<void>(async (resolve, reject) => {
     try {
-      const sheet = context.workbook.worksheets.getItem("Sheet1");
-      const currentChart = context.workbook.worksheets.getItem("Sheet1").charts.getItemOrNullObject("Covid19Chart");
+      const sheet = context.workbook.worksheets.getActiveWorksheet();
+      const currentChart = sheet.charts.getItemOrNullObject("Covid19Chart");
       if (currentChart) {
         currentChart.delete();
         await context.sync();
       }
 
       // Get table range
-      const currentTable = context.workbook.worksheets.getItem("Sheet1").tables.getItemOrNullObject("CovidTable");
+      const currentTable = context.workbook.worksheets.getActiveWorksheet().tables.getItemOrNullObject("CovidTable");
       const range = currentTable.getRange();
       range.load("address");
       await context.sync();
@@ -173,7 +157,7 @@ async function addChart(context): Promise<void> {
       const rows = currentTable.rows;
       rows.load("count");
       await context.sync();
-      const rowCount = rows.count;      
+      const rowCount = rows.count;
 
       let chart = sheet.charts.add(rowCount < 5 ? "3DColumnClustered" : "3DColumnStacked", dataRange, "auto");
       chart.name = "Covid19Chart";
