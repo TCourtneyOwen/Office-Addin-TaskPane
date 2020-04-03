@@ -147,7 +147,8 @@ async function addChart(context): Promise<void> {
       chart.name = "Covid19Chart";
       chart.title.text = "COVID-19 Data";
       chart.legend.position = "left"
-      chart.legend.format.fill.setSolidColor("white");      
+      chart.legend.format.fill.setSolidColor("white");
+      chart.format.fill.setSolidColor("white");
 
       // Don't add data labels if too much data - makes chart look cluttered
       if (rowCount < 5) {
