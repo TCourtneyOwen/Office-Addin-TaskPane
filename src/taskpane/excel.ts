@@ -32,23 +32,14 @@ export async function run() {
         if (countries[i].toString() === "") {
           ranegeData.push(["No country name entered"]);
         } else {
-          const dataByCountry = await getCovidDataByCountry(countries[i]);
-          
-          // Check to see if valid data was actually returned. If not, country specified was invalid
-          let found = false;
-          for (let [key] of Object.entries(dataByCountry[0])) {
-            if (key.toLowerCase() === countries[i][0].toLowerCase()) {
-              found = true;
-              break;
-            }
-          }
+          const dataByCountry = await getCovidDataByCountry(countries[i][0]);
 
           // If valid data was found add on to countryData for subsequent table and chart creation
-          if (found) {
+          if (dataByCountry.length > 0) {
             ranegeData.push([countries[i].toString()]);
             countryData.push(dataByCountry);
           } else {
-            ranegeData.push([`${countries[i]} is not a valid country name, silly!`]);
+            ranegeData.push([`${countries[i]} is not a real country name, silly!`]);
           }
         }
       }
@@ -68,19 +59,22 @@ export async function run() {
   }
 }
 
-async function getCovidDataByCountry(country: any[]): Promise<any> {
+async function getCovidDataByCountry(country: string): Promise<any> {
   return new Promise<object>(async (resolve, reject) => {
-    const serverResponse: any = {};
     try {
-      // Get data for country[ies]
-      let databyCountry: Object[] = []
-      for (let i = 0; i < country.length; i++) {
-        const dataByCountryApiUrl = `https://covid2019-api.herokuapp.com/country/${country[i]}`;
-        const response = await fetch(dataByCountryApiUrl);
-        serverResponse["status"] = response.status;
-        const text = await response.text();
-        const countryData = JSON.parse(text);
-        databyCountry.push(countryData);
+      // Get data for country
+      let databyCountry: Object[] = [];
+
+      const dataByCountryApiUrl = `https://covid2019-api.herokuapp.com/v2/current`;
+      const response = await fetch(dataByCountryApiUrl);
+      const text = await response.text();
+      const countryData = JSON.parse(text);
+
+      for (let j = 0; j < countryData.data.length; j++) {
+        if (countryData.data[j].location.toLowerCase() == country.toLowerCase()) {
+          databyCountry.push(countryData.data[j]);
+          break;
+        }
       }
       resolve(databyCountry);
     } catch (err) {
@@ -101,25 +95,15 @@ async function addTableForCountry(data: any, context): Promise<void | string> {
 
       // Add table to worksheet
       var sheet = context.workbook.worksheets.getActiveWorksheet();
-      var covidTable = sheet.tables.add("A1:D1", true /*hasHeaders*/);
+      var covidTable = sheet.tables.add("A1:E1", true /*hasHeaders*/);
       covidTable.name = "CovidTable";
-      covidTable.getHeaderRowRange().values = [["Country", "ComfirmedCases", "Recovered", "Deaths"]];
+      covidTable.getHeaderRowRange().values = [["Country", "Active", "ComfirmedCases", "Recovered", "Deaths"]];
 
       // Add rows to table
       for (let i = 0; i < data.length; i++) {
-        for (var key in data[i][0]) {
-          if (key === "dt" || key == "ts") {
-            continue;
-          }
-          const country = key;
-          const countryData = data[i][0][key];
-  
-          if (countryData[0] !== "dt") {
-            covidTable.rows.add(null /*add rows to the end of the table*/, [
-              [country, countryData.confirmed, countryData.recovered, countryData.deaths],
-            ]);
-          }
-        }
+        covidTable.rows.add(null /*add rows to the end of the table*/, [
+          [data[i][0].location, data[i][0].active, data[i][0].confirmed, data[i][0].recovered, data[i][0].deaths],
+        ]);
       }
 
       if (Office.context.requirements.isSetSupported("ExcelApi", "1.2")) {
@@ -162,16 +146,16 @@ async function addChart(context): Promise<void> {
       let chart = sheet.charts.add(rowCount < 5 ? "3DColumnClustered" : "3DColumnStacked", dataRange, "auto");
       chart.name = "Covid19Chart";
       chart.title.text = "COVID-19 Data";
-      chart.legend.position = "right"
-      chart.legend.format.fill.setSolidColor("white");
+      chart.legend.position = "left"
+      chart.legend.format.fill.setSolidColor("white");      
 
       // Don't add data labels if too much data - makes chart look cluttered
       if (rowCount < 5) {
         chart.dataLabels.format.font.size = 12;
-        chart.dataLabels.format.font.color = "black";
         chart.dataLabels.textOrientation = 90;
-      }
-
+        chart.dataLabels.format.font.color = "black";
+      } 
+      
       chart.height = 300;
       chart.width = 500;
 
