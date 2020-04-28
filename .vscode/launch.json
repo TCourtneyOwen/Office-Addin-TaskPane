@@ -5,153 +5,15 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "type": "node",
-      "request": "launch",
-      "name": "Debug Tests",
-      "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
-      "args": [
-        "-u",
-        "bdd",
-        "--timeout",
-        "999999",
-        "--colors",
-        "${workspaceFolder}/test",
-        "-r",
-        "ts-node/register",
-        "${workspaceFolder}/test/*.ts"
-      ],
-      "internalConsoleOptions": "openOnSessionStart",
-      "runtimeArgs": [
-        "--preserve-symlinks"
-      ]
-    },
-    {
-      "preLaunchTask": "Sideload",
       "type": "office-addin",
       "request": "attach",
-      "name": "Attach to Addin With SourceMaps",
+      "name": "Attach to Office Add-ins",
       "port": 9222,
       "trace": "verbose",
       "url": "https://localhost:3000/taskpane.html?_host_Info=Excel$Win32$16.01$en-US$$$$0",
       "webRoot": "${workspaceFolder}",
-      "sourceMaps": true,
-      "sourceMapPathOverrides": {
-        "webpack:///./src/*": "${workspaceFolder}/src/*",
-        "webpack:///./node_modules/*": "${workspaceFolder}/node_modules/*",
-      },
-      "showAsyncStacks": true,
-      "skipFiles": [
-        "excel-win32-16.01.js"
-      ],
-      "timeout": 45000
-    },
-    {
+      "timeout": 45000,
       "preLaunchTask": "Sideload",
-      "type": "office-addin",
-      "request": "launch",
-      "name": "Attach to Addin No SourceMaps",
-      "port": 9222,
-      "trace": "verbose",
-      "url": "https://localhost:3000/taskpane.html?_host_Info=Word$Win32$16.01$en-US$$$$0",
-      "webRoot": "${workspaceFolder}",
-      "sourceMaps": true,
-      "showAsyncStacks": true,
-      "skipFiles": [
-        "excel-win32-16.01.js"
-      ]
-    },
-    {
-      "type": "office-addin",
-      "request": "launch",
-      "name": "Attach to server",
-      "webRoot": "${workspaceFolder}",
-      "trace": "verbose",
-      "url": "https://localhost:3000/taskpane.html?_host_Info=Excel$Win32$16.01$en-US$$$$0",
-      "debugServer": 4712,
-      "sourceMaps": true,
-      "sourceMapPathOverrides": {
-        "webpack:///./src/*": "${workspaceFolder}/src/*",
-        "webpack:///./node_modules/*": "${workspaceFolder}/node_modules/*",
-        "webpack:///(webpack)-dev-server/*": "${workspaceFolder}/node_modules/webpack-dev-server/*",
-        "webpack:///(webpack)/*": "${workspaceFolder}/webpack/*",
-      }
-    },
-    {
-      "name": "Excel Desktop",
-      "type": "node",
-      "request": "launch",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": [
-        "run",
-        "start",
-        "desktop"
-      ],
-      "args": [
-        "--",
-        "--app",
-        "excel"
-      ]
-    },
-    {
-      "name": "PowerPoint Desktop",
-      "type": "node",
-      "request": "launch",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": [
-        "run",
-        "start",
-        "desktop"
-      ],
-      "args": [
-        "--",
-        "--app",
-        "powerpoint"
-      ]
-    },
-    {
-      "name": "Word Desktop",
-      "type": "node",
-      "request": "launch",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": [
-        "run",
-        "start",
-        "desktop"
-      ],
-      "args": [
-        "--",
-        "--app",
-        "word"
-      ]
-    },
-    {
-      "name": "Office Online (Chrome)",
-      "type": "chrome",
-      "request": "launch",
-      // To debug your Add-in:
-      // 1. When prompted, enter the url (share link) to an Office Online document.
-      // 2. Sideload your Add-in. https://docs.microsoft.com/en-us/office/dev/add-ins/testing/sideload-office-add-ins-for-testing
-      "url": "${input:officeOnlineDocumentUrl}",
-      "webRoot": "${workspaceFolder}",
-      "preLaunchTask": "Debug: Web"
-    },
-    {
-      "name": "Office Online (Edge)",
-      "type": "edge",
-      "request": "launch",
-      // To debug your Add-in:
-      // 1. When prompted, enter the url (share link) to an Office Online document.
-      // 2. Sideload your Add-in. https://docs.microsoft.com/en-us/office/dev/add-ins/testing/sideload-office-add-ins-for-testing
-      "url": "${input:officeOnlineDocumentUrl}",
-      "webRoot": "${workspaceFolder}",
-      "preLaunchTask": "Debug: Web"
-    }
-  ],
-  "inputs": [
-    {
-      "id": "officeOnlineDocumentUrl",
-      "type": "promptString",
-      "description": "Please enter the url for the Office Online document."
     }
   ]
 }
