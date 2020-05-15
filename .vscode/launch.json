@@ -52,15 +52,17 @@
       "name": "Attach to Addin No SourceMaps",
       "port": 9222,
       "trace": "verbose",
-      "url": "https://localhost:3000/taskpane.html?_host_Info=Word$Win32$16.01$en-US$$$$0",
+      "url": "https://localhost:3000/taskpane.html?_host_Info=Excel$Win32$16.01$en-US$$$$0",
       "webRoot": "${workspaceFolder}",
       "sourceMaps": true,
       "showAsyncStacks": true,
       "skipFiles": [
         "excel-win32-16.01.js"
-      ]
+      ],
+      "timeout": 45000
     },
     {
+      "preLaunchTask": "Sideload",
       "type": "office-addin",
       "request": "launch",
       "name": "Attach to server",
