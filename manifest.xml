@@ -16,9 +16,6 @@
     <AppDomain>https://www.contoso.com</AppDomain>
   </AppDomains>
   <Hosts>
-    <Host Name="Document"/>
-    <Host Name="Notebook"/>
-    <Host Name="Presentation"/>
     <Host Name="Workbook"/>
   </Hosts>
   <DefaultSettings>
@@ -27,120 +24,6 @@
   <Permissions>ReadWriteDocument</Permissions>
   <VersionOverrides xmlns="http://schemas.microsoft.com/office/taskpaneappversionoverrides" xsi:type="VersionOverridesV1_0">
     <Hosts>
-      <Host xsi:type="Document">
-        <DesktopFormFactor>
-          <GetStarted>
-            <Title resid="GetStarted.Title"/>
-            <Description resid="GetStarted.Description"/>
-            <LearnMoreUrl resid="GetStarted.LearnMoreUrl"/>
-          </GetStarted>
-          <FunctionFile resid="Commands.Url" />
-          <ExtensionPoint xsi:type="PrimaryCommandSurface">
-            <OfficeTab id="TabHome">
-              <Group id="CommandsGroup">
-                <Label resid="CommandsGroup.Label" />
-                <Icon>
-                  <bt:Image size="16" resid="Icon.16x16" />
-                  <bt:Image size="32" resid="Icon.32x32" />
-                  <bt:Image size="80" resid="Icon.80x80" />
-                </Icon>
-                <Control xsi:type="Button" id="TaskpaneButton">
-                  <Label resid="TaskpaneButton.Label" />
-                  <Supertip>
-                    <Title resid="TaskpaneButton.Label" />
-                    <Description resid="TaskpaneButton.Tooltip" />
-                  </Supertip>
-                  <Icon>
-                    <bt:Image size="16" resid="Icon.16x16" />
-                    <bt:Image size="32" resid="Icon.32x32" />
-                    <bt:Image size="80" resid="Icon.80x80" />
-                  </Icon>
-                  <Action xsi:type="ShowTaskpane">
-                    <TaskpaneId>ButtonId1</TaskpaneId>
-                    <SourceLocation resid="Taskpane.Url" />
-                  </Action>
-                </Control>
-              </Group>
-            </OfficeTab>
-          </ExtensionPoint>
-        </DesktopFormFactor>
-      </Host>
-      <Host xsi:type="Notebook">
-        <DesktopFormFactor>
-          <GetStarted>
-            <Title resid="GetStarted.Title"/>
-            <Description resid="GetStarted.Description"/>
-            <LearnMoreUrl resid="GetStarted.LearnMoreUrl"/>
-          </GetStarted>
-          <FunctionFile resid="Commands.Url" />
-          <ExtensionPoint xsi:type="PrimaryCommandSurface">
-            <OfficeTab id="TabHome">
-              <Group id="CommandsGroup">
-                <Label resid="CommandsGroup.Label" />
-                <Icon>
-                  <bt:Image size="16" resid="Icon.16x16" />
-                  <bt:Image size="32" resid="Icon.32x32" />
-                  <bt:Image size="80" resid="Icon.80x80" />
-                </Icon>
-                <Control xsi:type="Button" id="TaskpaneButton">
-                  <Label resid="TaskpaneButton.Label" />
-                  <Supertip>
-                    <Title resid="TaskpaneButton.Label" />
-                    <Description resid="TaskpaneButton.Tooltip" />
-                  </Supertip>
-                  <Icon>
-                    <bt:Image size="16" resid="Icon.16x16" />
-                    <bt:Image size="32" resid="Icon.32x32" />
-                    <bt:Image size="80" resid="Icon.80x80" />
-                  </Icon>
-                  <Action xsi:type="ShowTaskpane">
-                    <TaskpaneId>ButtonId1</TaskpaneId>
-                    <SourceLocation resid="Taskpane.Url" />
-                  </Action>
-                </Control>
-              </Group>
-            </OfficeTab>
-          </ExtensionPoint>
-        </DesktopFormFactor>
-      </Host>
-      <Host xsi:type="Presentation">
-        <DesktopFormFactor>
-          <GetStarted>
-            <Title resid="GetStarted.Title"/>
-            <Description resid="GetStarted.Description"/>
-            <LearnMoreUrl resid="GetStarted.LearnMoreUrl"/>
-          </GetStarted>
-          <FunctionFile resid="Commands.Url" />
-          <ExtensionPoint xsi:type="PrimaryCommandSurface">
-            <OfficeTab id="TabHome">
-              <Group id="CommandsGroup">
-                <Label resid="CommandsGroup.Label" />
-                <Icon>
-                  <bt:Image size="16" resid="Icon.16x16" />
-                  <bt:Image size="32" resid="Icon.32x32" />
-                  <bt:Image size="80" resid="Icon.80x80" />
-                </Icon>
-                <Control xsi:type="Button" id="TaskpaneButton">
-                  <Label resid="TaskpaneButton.Label" />
-                  <Supertip>
-                    <Title resid="TaskpaneButton.Label" />
-                    <Description resid="TaskpaneButton.Tooltip" />
-                  </Supertip>
-                  <Icon>
-                    <bt:Image size="16" resid="Icon.16x16" />
-                    <bt:Image size="32" resid="Icon.32x32" />
-                    <bt:Image size="80" resid="Icon.80x80" />
-                  </Icon>
-                  <Action xsi:type="ShowTaskpane">
-                    <TaskpaneId>ButtonId1</TaskpaneId>
-                    <SourceLocation resid="Taskpane.Url" />
-                  </Action>
-                </Control>
-              </Group>
-            </OfficeTab>
-          </ExtensionPoint>
-        </DesktopFormFactor>
-      </Host>
       <Host xsi:type="Workbook">
         <DesktopFormFactor>
           <GetStarted>
@@ -174,6 +57,28 @@
                     <SourceLocation resid="Taskpane.Url" />
                   </Action>
                 </Control>
+                <Control xsi:type="Button" id="Contoso.FunctionButton">
+                <!--Label for your button. resid must point to a ShortString resource -->
+                  <Label resid="Contoso.FunctionButton.Label" />
+                  <Supertip>
+                  	 <!--ToolTip title. resid must point to a ShortString resource -->
+                    <Title resid="Contoso.FunctionButton.Label" />
+                     <!--ToolTip description. resid must point to a LongString resource -->
+                    <Description resid="Contoso.FunctionButton.Tooltip" />
+                  </Supertip>
+                  <Icon>
+                    <bt:Image size="16" resid="Icon.16x16" />
+                    <bt:Image size="32" resid="Icon.32x32" />
+                    <bt:Image size="80" resid="Icon.80x80" />
+                  </Icon>
+                  <!--This is what happens when the command is triggered (E.g. click on the Ribbon). Supported actions are ExecuteFuncion or ShowTaskpane-->
+                  <!--Look at the FunctionFile.html page for reference on how to implement the function -->
+                  <Action xsi:type="ExecuteFunction">
+                  <!--Name of the function to call. This function needs to exist in the global DOM namespace of the function file-->
+                    <FunctionName>fillCell</FunctionName>
+                    <SourceLocation resid="Commands.Url" />
+                  </Action>
+                </Control>
               </Group>
             </OfficeTab>
           </ExtensionPoint>
@@ -195,10 +100,12 @@
         <bt:String id="GetStarted.Title" DefaultValue="Get started with your sample add-in!" />
         <bt:String id="CommandsGroup.Label" DefaultValue="Commands Group" />
         <bt:String id="TaskpaneButton.Label" DefaultValue="Show Taskpane" />
+        <bt:String id="Contoso.FunctionButton.Label" DefaultValue="Fill cell" />
       </bt:ShortStrings>
       <bt:LongStrings>
         <bt:String id="GetStarted.Description" DefaultValue="Your sample add-in loaded succesfully. Go to the HOME tab and click the 'Show Taskpane' button to get started." />
         <bt:String id="TaskpaneButton.Tooltip" DefaultValue="Click to Show a Taskpane" />
+        <bt:String id="Contoso.FunctionButton.Tooltip" DefaultValue="Click to fill cell" />
       </bt:LongStrings>
     </Resources>
   </VersionOverrides>

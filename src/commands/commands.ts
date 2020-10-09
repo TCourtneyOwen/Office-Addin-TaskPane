@@ -28,6 +28,28 @@ function action(event: Office.AddinCommands.Event) {
   event.completed();
 }
 
+async function fillCell() {
+  try {
+    await Excel.run(async context => {
+      /**
+       * Insert your Excel code here
+       */
+      const range = context.workbook.getSelectedRange();
+
+      // Read the range address
+      range.load("address");
+
+      // Update the fill color
+      range.format.fill.color = "red";
+
+      await context.sync();
+      console.log(`The range address was ${range.address}.`);
+    });
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 function getGlobal() {
   return typeof self !== "undefined"
     ? self
@@ -42,3 +64,4 @@ const g = getGlobal() as any;
 
 // the add-in command functions need to be available in global scope
 g.action = action;
+g.fillCell = fillCell;
