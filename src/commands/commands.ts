@@ -28,7 +28,7 @@ function action(event: Office.AddinCommands.Event) {
   event.completed();
 }
 
-async function fillCell() {
+async function fillCell(event: Office.AddinCommands.Event) {
   try {
     await Excel.run(async context => {
       /**
@@ -43,8 +43,9 @@ async function fillCell() {
       range.format.fill.color = "red";
 
       await context.sync();
-      console.log(`The range address was ${range.address}.`);
+      console.log(`The range address was ${range.address}.`);    
     });
+    event.completed();
   } catch (error) {
     console.error(error);
   }
