@@ -14,9 +14,10 @@ Office.onReady(() => {
  * @param event
  */
 function action(event: Office.AddinCommands.Event) {
+  var msgFrom = Office.context.mailbox.item.from;
   const message: Office.NotificationMessageDetails = {
     type: Office.MailboxEnums.ItemNotificationMessageType.InformationalMessage,
-    message: "Performed action.",
+    message: msgFrom.displayName,
     icon: "Icon.80x80",
     persistent: true
   };
@@ -38,7 +39,37 @@ function getGlobal() {
     : undefined;
 }
 
+function validateSendable(event) {
+	Office.context.mailbox.item.loadCustomPropertiesAsync(
+		function (asyncResult)
+		{
+			if (asyncResult.status === Office.AsyncResultStatus.Succeeded)
+			{
+				var customProps = asyncResult.value;
+				var isSendable = customProps.get('isSendable');
+				isSendable = isSendable === undefined ? true : isSendable;
+				event.completed({ allowEvent: isSendable });
+			} else {
+				Office.context.mailbox.item.notificationMessages.replaceAsync(
+				"isSendable",
+				{
+					type: "informationalMessage", icon: "icon1",
+					message: "Loading toggle state failed.",
+					persistent: false
+				}, function (result) {
+					// if (result.status == "failed") {
+					// 	var statusString = 'Failed ' + result.error.code + ': ' + result.error.name + ': ' + result.error.message;
+					// 	console.log(statusString);
+					// }
+					event.completed({ allowEvent: true });
+				});
+			}
+		}
+	);
+}
+
 const g = getGlobal() as any;
 
 // the add-in command functions need to be available in global scope
 g.action = action;
+g.validateSendable = validateSendable;

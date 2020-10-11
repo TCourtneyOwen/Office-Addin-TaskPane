@@ -5,37 +5,23 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "type": "node",
-      "request": "launch",
-      "name": "Debug Tests",
-      "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
-      "args": [
-        "-u",
-        "bdd",
-        "--timeout",
-        "999999",
-        "--colors",
-        "${workspaceFolder}/test",
-        "-r",
-        "ts-node/register",
-        "${workspaceFolder}/test/*.ts"
-      ],
-      "internalConsoleOptions": "openOnSessionStart",
-      "runtimeArgs": [
-        "--preserve-symlinks"
-      ]
-    },
-    {
       "name": "Excel Desktop (Edge Chromium)",
       "type": "edge",
       "request": "attach",
       "useWebView": "advanced",
-      "port": 9222,
+      "port": 9229,
       "timeout": 45000,
       "webRoot": "${workspaceRoot}",
       "preLaunchTask": "Debug: Excel Desktop",
       "postDebugTask": "Stop Debug"
     },
+    {
+      "type": "vscode-edge-devtools.debug",
+      "request": "launch",
+      "name": "Attach to Microsoft Edge and open the Edge DevTools",
+      "url": "${input:officeOnlineDocumentUrl}",
+      "webRoot": "${workspaceRoot}"
+  },
     {
       "name": "Excel Desktop (Edge Legacy)",
       "type": "office-addin",
@@ -106,11 +92,19 @@
       "name": "Office Online (Edge)",
       "type": "edge",
       "request": "launch",
+      "trace":"verbose",
       // To debug your Add-in:
       // 1. When prompted, enter the url (share link) to an Office Online document.
       // 2. Sideload your Add-in. https://docs.microsoft.com/en-us/office/dev/add-ins/testing/sideload-office-add-ins-for-testing
       "url": "${input:officeOnlineDocumentUrl}",
       "webRoot": "${workspaceFolder}",
+      "sourceMaps": true,
+      "sourceMapPathOverrides": {
+        "webpack:///./src/*": "${workspaceFolder}/src/*",
+        "webpack:///./node_modules/*": "${workspaceFolder}/node_modules/*",
+        "webpack:///(webpack)-dev-server/*": "${workspaceFolder}/node_modules/webpack-dev-server/*",
+        "webpack:///(webpack)/*": "${workspaceFolder}/webpack/*",
+      },
       "preLaunchTask": "Debug: Web"
     }
   ],
