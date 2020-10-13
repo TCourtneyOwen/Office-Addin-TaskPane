@@ -12,8 +12,8 @@
       "port": 9229,
       "timeout": 45000,
       "webRoot": "${workspaceRoot}",
-      // "preLaunchTask": "Debug: Excel Desktop",
-      // "postDebugTask": "Stop Debug"
+       "preLaunchTask": "Debug: Excel Desktop",
+       "postDebugTask": "Stop Debug"
     },
     {
       "name": "Excel Desktop (Edge Legacy)",
