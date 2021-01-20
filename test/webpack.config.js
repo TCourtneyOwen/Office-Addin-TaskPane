@@ -58,6 +58,13 @@ module.exports = async (env, options) => {
                     from: path.resolve(__dirname, './../src/taskpane/taskpane.css')
                 }
                 ]}),
+            new CopyWebpackPlugin({
+                patterns: [
+                {
+                    to: "test-manifest.xml",
+                    from: path.resolve(__dirname, './test-manifest.xml')
+                }
+                ]}),
         ],
         devServer: {
             contentBase: path.join(__dirname, 'testBuild'),
