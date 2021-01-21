@@ -18,7 +18,7 @@
         "${workspaceFolder}/test",
         "-r",
         "ts-node/register",
-        "${workspaceFolder}/test/*.ts"
+        "${workspaceFolder}/test/ui-tests.ts"
       ],
       "internalConsoleOptions": "openOnSessionStart",
       "runtimeArgs": [
@@ -77,8 +77,8 @@
       "port": 9229,
       "timeout": 600000,
       "webRoot": "${workspaceRoot}",
-      "preLaunchTask": "Debug: Word Desktop",
-      "postDebugTask": "Stop Debug"
+      //"preLaunchTask": "Debug: Word Desktop",
+      //"postDebugTask": "Stop Debug"
     },
     {
       "name": "Word Desktop (Edge Legacy)",

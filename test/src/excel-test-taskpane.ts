@@ -31,6 +31,11 @@ export async function runTest(): Promise<void> {
                 testHelpers.addTestResult(testValues, "fill-color", cellFill.color, "#FFFF00");
                 await sendTestResults(testValues, port);
                 testValues.pop();
+
+                // Revert cell fill for future testing
+                cellFill.clear();
+                await context.sync();
+
                 await testHelpers.closeWorkbook();
                 resolve();
             });

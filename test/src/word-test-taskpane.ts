@@ -22,12 +22,25 @@ export async function runTest() {
 
             // Get output of executed taskpane code
             Word.run(async (context) => {
-                var firstParagraph = context.document.body.paragraphs.getFirst();
-                firstParagraph.load("text");
+                let content: string = "";
+                let results = context.document.body.search("Hello World");
+                results.load("length");
+
                 await context.sync();
+
+                if (results.items.length > 0) {
+                    results.items[0].load("text");
+                    await context.sync();
+                    content = results.items[0].text;
+
+                    // Revert doc content for future testing
+                    context.document.body.clear();
+                    await context.sync();
+                }
+
                 await testHelpers.sleep(2000);
 
-                testHelpers.addTestResult(testValues, "output-message", firstParagraph.text, "Hello World");
+                testHelpers.addTestResult(testValues, "output-message", content, "Hello World");
                 await sendTestResults(testValues, port);
                 testValues.pop();
                 resolve();

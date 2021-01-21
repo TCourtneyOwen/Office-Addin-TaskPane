@@ -17,7 +17,7 @@ let testServer: officeAddinTestServer.TestServer;
 describe(`Test Task Pane Project Add-ins`, function () {
     this.beforeAll(`Start dev-server`, async function () {
         this.timeout(0);
-        const devServerCmd = `npm run dev-server -- --config ./test/webpack.config.js `;
+        const devServerCmd = `npm run dev-server -- --config ./test/webpack.config.js`;
         const devServerPort = parseNumber(process.env.npm_package_config_dev_server_port || 3000);
         await runDevServer(devServerCmd, devServerPort);
     }),
