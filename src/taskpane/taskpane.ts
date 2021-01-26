@@ -19,5 +19,13 @@ Office.onReady(info => {
 });
 
 export async function run() {
-  var msgFrom = Office.context.mailbox.item.from;
+  const message: Office.NotificationMessageDetails = {
+    type: Office.MailboxEnums.ItemNotificationMessageType.InformationalMessage,
+    message: "Performed action.",
+    icon: "Icon.80x80",
+    persistent: true
+  };
+
+  // Show a notification message
+  Office.context.mailbox.item.notificationMessages.replaceAsync("action", message);
 }

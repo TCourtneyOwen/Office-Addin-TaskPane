@@ -29,9 +29,9 @@
       }
     },
     {
-      "label": "Debug: Excel Desktop",
+      "label": "Debug: Outlook Desktop",
       "type": "npm",
-      "script": "start:desktop -- --app excel",
+      "script": "start:desktop -- --app outlook",
       "presentation": {
         "clear": true,
         "panel": "dedicated",
