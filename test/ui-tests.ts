@@ -13,6 +13,7 @@ const testServerPort: number = 4201;
 const excelDoc: string = "https://microsoft-my.sharepoint-df.com/:x:/r/personal/cowen_microsoft_com/_layouts/15/Doc.aspx?sourcedoc=%7B1CC01E6F-5588-428D-A597-D2E008F3C608%7D&file=Book.xlsx&action=default&mobileredirect=true";
 const wordDoc: string = "https://microsoft-my.sharepoint-df.com/:w:/r/personal/cowen_microsoft_com/_layouts/15/Doc.aspx?sourcedoc=%7BE0F19AB3-BDAC-4438-99D3-1729867C3624%7D&file=Document.docx&action=default&mobileredirect=true";
 let testServer: officeAddinTestServer.TestServer;
+process.env.WEB_SIDELOAD_TEST = "true";
 
 describe(`Test Task Pane Project Add-ins`, function () {
     this.beforeAll(`Start dev-server`, async function () {
@@ -37,8 +38,7 @@ describe(`Test Task Pane Project Add-ins`, function () {
             assert.strictEqual(serverResponse["status"], 200);
         });
         it("Validate expected result count", async function () {
-            await startDebugging(manifestPath, AppType.Desktop, toOfficeApp(hosts[0]), undefined, undefined,
-                undefined, undefined, undefined, undefined, undefined, false /* enableDebugging */);
+            await startDebugging({manifestPath, appType: AppType.Desktop, app: toOfficeApp(hosts[0]), enableDebugging: false});
             this.timeout(0);
             testValues = await testServer.getTestResults();
             assert.strictEqual(testValues.length > 0, true);
@@ -67,8 +67,7 @@ describe(`Test Task Pane Project Add-ins`, function () {
             assert.strictEqual(serverResponse["status"], 200);
         });
         it("Validate expected result count", async function () {
-            await startDebugging(manifestPath, AppType.Web, toOfficeApp(hosts[0]), undefined, undefined,
-                undefined, undefined, undefined, undefined, undefined, false /* enableDebugging */, undefined, undefined, excelDoc, true /* isTest */);
+            await startDebugging({manifestPath, appType: AppType.Web, app: toOfficeApp(hosts[0]), document: excelDoc});
             this.timeout(0);
             testValues = await testServer.getTestResults();
             assert.strictEqual(testValues.length > 0, true);
@@ -97,8 +96,7 @@ describe(`Test Task Pane Project Add-ins`, function () {
             assert.strictEqual(serverResponse["status"], 200);
         });
         it("Validate expected result count", async function () {
-            await startDebugging(manifestPath, AppType.Desktop, toOfficeApp(hosts[1]), undefined, undefined,
-                undefined, undefined, undefined, undefined, undefined, false /* enableDebugging */);
+            await startDebugging({manifestPath, appType: AppType.Desktop, app: toOfficeApp(hosts[1]), enableDebugging: false});
             this.timeout(0);
             testValues = await testServer.getTestResults();
             assert.strictEqual(testValues.length > 0, true);
@@ -130,8 +128,7 @@ describe(`Test Task Pane Project Add-ins`, function () {
             assert.strictEqual(serverResponse["status"], 200);
         });
         it("Validate expected result count", async function () {
-            await startDebugging(manifestPath, AppType.Web, toOfficeApp(hosts[1]), undefined, undefined,
-                undefined, undefined, undefined, undefined, undefined, false /* enableDebugging */, undefined, undefined, wordDoc, true /* isTest */);
+            await startDebugging({manifestPath, appType: AppType.Web, app: toOfficeApp(hosts[1]), document: wordDoc});
             this.timeout(0);
             testValues = await testServer.getTestResults();
             assert.strictEqual(testValues.length > 0, true);
